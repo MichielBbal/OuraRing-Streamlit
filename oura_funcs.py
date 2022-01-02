@@ -67,3 +67,12 @@ def HRV(start_date, end_date):
     data = oura_load(start_date, end_date)
     my_HRV = data['rmssd_5min']
     return my_HRV
+def make_df(start_date, end_date):
+    sleep_df = pd.DataFrame() #create an empty data frame
+    # Add columns with their data to the df
+    #sleep_df['Start_time']=oura_funcs.startintervals(str(start_date), str(end_date))
+    #sleep_df['Stage']= oura_funcs.hypnogram(str(start_date), str(end_date))
+    sleep_df['hr']=oura_funcs.hr(str(start_date), str(end_date))
+    #sleep_df['HRV']=oura_funcs.HRV(str(start_date), str(end_date))
+    #sleep_df = sleep_df.replace(0, np.NaN) # replace 0 with NaN
+    return sleep_df
