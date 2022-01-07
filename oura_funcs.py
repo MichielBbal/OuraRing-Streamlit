@@ -5,6 +5,7 @@ import datetime
 from datetime import date
 from dateutil import parser
 import pandas as pd
+import numpy as np
 
 def oura_load(start_date, end_date):
     oura_pat = notebooks_config.oura_pat #
@@ -70,9 +71,13 @@ def HRV(start_date, end_date):
 def make_df(start_date, end_date):
     sleep_df = pd.DataFrame() #create an empty data frame
     # Add columns with their data to the df
-    #sleep_df['Start_time']=oura_funcs.startintervals(str(start_date), str(end_date))
-    #sleep_df['Stage']= oura_funcs.hypnogram(str(start_date), str(end_date))
-    sleep_df['hr']=oura_funcs.hr(str(start_date), str(end_date))
-    #sleep_df['HRV']=oura_funcs.HRV(str(start_date), str(end_date))
-    #sleep_df = sleep_df.replace(0, np.NaN) # replace 0 with NaN
+    sleep_df['Start_time']=startintervals(str(start_date), str(end_date))
+    sleep_df['Stage']= hypnogram(str(start_date), str(end_date))
+    sleep_df['hr']=pd.Series(hr(str(start_date), str(end_date)))
+    sleep_df['HRV']=pd.Series(HRV(str(start_date), str(end_date)))
+    sleep_df = sleep_df.replace(0, np.NaN) # replace 0 with NaN
     return sleep_df
+def deepsleep(start_date, end_date):
+    deep_sleep = hypnogram(start_date, end_date).count(1)
+    deep_sleep_perc= round((deep_sleep/len(hypnogram(start_date, end_date))*100),2)
+    return deep_sleep*5, deep_sleep_perc
