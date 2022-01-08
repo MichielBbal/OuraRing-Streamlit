@@ -36,7 +36,11 @@ def end_time(start_date, end_date):
     start_time_dt = parser.parse(start_time)
     end_time_dt = parser.parse(end_time)
     return end_time_dt
-#('start time is '+ str(start_time_dt) + ' and end time is ' + str(end_time_dt))
+def sleep_total(start_date, end_date):
+    my_start_time = start_time(start_date, end_date)
+    my_end_time = end_time(start_date, end_date)
+    sleep_total = my_end_time - my_start_time
+    return sleep_total
 def startintervals(start_date, end_date):
     start_time_dt = start_time(start_date, end_date)
     time_change = datetime.timedelta(minutes=5)
@@ -81,3 +85,9 @@ def deepsleep(start_date, end_date):
     deep_sleep = hypnogram(start_date, end_date).count(1)
     deep_sleep_perc= round((deep_sleep/len(hypnogram(start_date, end_date))*100),2)
     return deep_sleep*5, deep_sleep_perc
+def stats(start_date, end_date):
+    data=oura_load(start_date, end_date)
+    breath = data['breath_average']
+    temp_dev = data['temperature_deviation']
+    restless = data['restless']
+    return breath, temp_dev, restless

@@ -23,18 +23,22 @@ if st.sidebar.button('Load'):
     col1, col2 = st.columns(2)
 
     with col1:
-        st.write("The start date is: "+ str(start_date))
-        st.write('The end date is: '+ str(end_date))
-    
         # show start and endtimes
         start_time = oura_funcs.start_time(str(start_date), str(end_date))
         end_time = oura_funcs.end_time(str(start_date), str(end_date))
+        sleep_total = oura_funcs.sleep_total(str(start_date), str(end_date))
         st.write('You fell asleep at: '+ str(start_time))
         st.write('You woke up at: ' + str(end_time))
+        st.write("Your total sleep time was: "+ str(sleep_total))
         #calculate time in deep sleep
-        st.write('Your deep sleep was ' + str(oura_funcs.deepsleep(str(start_date), str(end_date))[0]) + ' minutes')
-        st.write('That is ' + str(oura_funcs.deepsleep(str(start_date), str(end_date))[1]) + '% of the time')
-    
+        st.write('Your deep sleep was ' + str(oura_funcs.deepsleep(str(start_date), str(end_date))[0]) + ' minutes. That is ' + str(oura_funcs.deepsleep(str(start_date), str(end_date))[1]) + '% of the time') 
+        #other stats
+        breath = oura_funcs.stats(str(start_date), str(end_date))[0]
+        temp_dev = oura_funcs.stats(str(start_date), str(end_date))[1]
+        restless = oura_funcs.stats (str(start_date), str(end_date))[2]
+        st.write('Average breathing: '+ str(breath))
+        st.write('Temperature deviation: '+ str(temp_dev))
+        st.write('Restlessness %: ' + str(restless)) 
         sleep_df = oura_funcs.make_df(start_date, end_date)
        
         #first graph 
