@@ -1,13 +1,11 @@
 import streamlit as st
 import pandas as pd
 import oura_funcs
-from datetime import date
 import datetime
-# SETTING PAGE CONFIG TO WIDE MODE
+from datetime import date
+# Setting page to wide mode and showing dashboard title
 st.set_page_config(layout="wide")
-
 st.title('Oura sleep data')
-
 
 # Sidebar inputs
 st.sidebar.header('Oura data')
@@ -16,9 +14,7 @@ end_date = st.sidebar.date_input('End date', date.today())
 start_date = end_date - datetime.timedelta(days=1)
 
 if st.sidebar.button('Load'):
-    
-       
-    
+        
     #define columns
     col1, col2 = st.columns(2)
 

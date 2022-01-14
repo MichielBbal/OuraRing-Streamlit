@@ -91,3 +91,10 @@ def stats(start_date, end_date):
     temp_dev = data['temperature_deviation']
     restless = data['restless']
     return breath, temp_dev, restless
+def stages(start_date,end_date):
+    data = oura_load(start_date, end_date)
+    awake = data['awake']/60
+    rem = data['rem']/60
+    light=data['light']/60
+    deep= data['deep']/60
+    return awake, rem, light, deep
