@@ -25,6 +25,9 @@ def start_time(start_date, end_date):
     # convert strings to datetime using dateutil
     start_time_dt = parser.parse(start_time)
     end_time_dt = parser.parse(end_time)
+    #remove timezones
+    start_time_dt = start_time_dt.replace(tzinfo=None)
+    end_time_dt = end_time_dt.replace(tzinfo=None)
     return start_time_dt
     #('start time is '+ str(start_time_dt) + ' and end time is ' + str(end_time_dt))
 def end_time(start_date, end_date):
@@ -35,6 +38,9 @@ def end_time(start_date, end_date):
     # convert strings to datetime using dateutil
     start_time_dt = parser.parse(start_time)
     end_time_dt = parser.parse(end_time)
+    #remove timezones
+    start_time_dt = start_time_dt.replace(tzinfo=None)
+    end_time_dt = end_time_dt.replace(tzinfo=None)
     return end_time_dt
 def sleep_total(start_date, end_date):
     my_start_time = start_time(start_date, end_date)
@@ -92,9 +98,14 @@ def stats(start_date, end_date):
     restless = data['restless']
     return breath, temp_dev, restless
 def stages(start_date,end_date):
+    my_stages =[]
     data = oura_load(start_date, end_date)
     awake = data['awake']/60
     rem = data['rem']/60
     light=data['light']/60
     deep= data['deep']/60
-    return awake, rem, light, deep
+    my_stages.append(awake)
+    my_stages.append(rem)
+    my_stages.append(light)
+    my_stages.append(deep)
+    return my_stages

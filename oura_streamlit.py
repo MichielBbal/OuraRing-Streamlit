@@ -1,8 +1,12 @@
 import streamlit as st
 import pandas as pd
-import oura_funcs
 import datetime
 from datetime import date
+import matplotlib.pyplot as plt
+#import the other python files
+import oura_funcs #oura functions
+import snoring_funcs # snoring functions
+
 # Setting page to wide mode and showing dashboard title
 st.set_page_config(layout="wide")
 st.title('Oura sleep data')
@@ -13,8 +17,13 @@ st.sidebar.write('Select the date of waking up and click the "Load" button')
 end_date = st.sidebar.date_input('End date', date.today())
 start_date = end_date - datetime.timedelta(days=1)
 
+#instantiate the dataframes
+sleep_df = oura_funcs.make_df(start_date, end_date)
+
 if st.sidebar.button('Load'):
-        
+    snoring_df = snoring_funcs.create_snoring_df(str(start_date), str(end_date))
+    stats_df = snoring_funcs.snoring_stats(str(start_date), str(end_date))
+    st.write(stats_df)
     #define columns
     col1, col2 = st.columns(2)
 
@@ -35,7 +44,6 @@ if st.sidebar.button('Load'):
         st.write('Average breathing: '+ str(breath))
         st.write('Temperature deviation: '+ str(temp_dev))
         st.write('Restlessness %: ' + str(restless)) 
-        sleep_df = oura_funcs.make_df(start_date, end_date)
        
         #first graph 
         st.bar_chart(sleep_df['Stage'])
@@ -62,6 +70,16 @@ if st.sidebar.button('Load'):
         st.write('maximum hr: ' + str(round(hr_max)))
         st.write('maximum HRV: ' + str(round(HRV_max)))
         st.line_chart(sleep_df['hr'])
+        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
+        labels = 'Awake', 'Rem', 'Light', 'Deep'
+        sleep = oura_funcs.stages(str(start_date), str(end_date))
+        #explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sleep, labels=labels, autopct='%1.1f%%',
+            shadow=False, startangle=90)
+        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle. explode=explode, 
+        st.pyplot(fig1)
+
         #show the dataframe
         st.write('And this is the data:')
         st.dataframe(sleep_df)
